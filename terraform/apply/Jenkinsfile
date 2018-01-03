@@ -1,0 +1,34 @@
+#!/usr/bin/env groovy
+
+pipeline {
+        agent any
+
+        stages {
+/*                stage('Checkout') {
+                        steps {
+                                git url: 'https://github.com/evry/cloudascore', 
+                                        branch: 'master', 
+                                        credentialsId: 'e74297bf-3674-4207-aecc-26ad65aa3f01'
+                        }
+                }
+*/                
+                stage('Terraform') {
+                        steps {
+                                dir('terraform/' + buildPath) {
+                                        /*
+                                        sh 'terraform init -var-file variable_values.tfvars'
+                                        sh 'terraform plan -var-file variable_values.tfvars'
+                                        sh 'terraform apply -var-file variable_values.tfvars -auto-approve=true'
+                                        */
+
+                                        sh 'terraform init'
+                                        sh 'terraform plan'
+                                        sh 'terraform apply -auto-approve=true'
+                                        sh 'terraform state pull'
+ #                                       sh 'terraform state pull > terraform-test.tfstate'
+                                }
+                        }
+                }       
+        }
+}
+

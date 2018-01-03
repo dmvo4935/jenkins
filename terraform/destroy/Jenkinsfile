@@ -1,0 +1,31 @@
+#!/usr/bin/env groovy
+
+pipeline {
+        agent any
+
+        stages {
+/*                stage('Checkout') {
+                        steps {
+                                git url: 'https://github.com/evry/cloudascore', 
+                                        branch: 'master', 
+                                        credentialsId: 'e74297bf-3674-4207-aecc-26ad65aa3f01'
+                        }
+                }
+*/
+                stage('Terraform') {
+                        steps {
+                                dir('terraform/' + buildPath) {
+                                        /*
+                                        sh 'terraform plan -destroy -var-file variable_values.tfvars'
+                                        sh 'terraform destroy -var-file variable_values.tfvars --force'
+                                        */
+
+                                        sh 'terraform init'
+                                        sh 'terraform plan -destroy'
+                                        sh 'terraform destroy --force'
+                                }
+                        }
+                }
+        }
+}
+
