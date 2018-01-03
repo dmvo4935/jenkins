@@ -25,7 +25,7 @@ pipeline {
                                         sh 'terraform plan'
                                         sh 'terraform apply -auto-approve=true'
                                         sh 'terraform state pull'
- /*                                       sh 'terraform state pull > terraform-test.tfstate' */
+ #                                       sh 'terraform state pull > terraform-test.tfstate'
                                 }
                         }
                 }       
