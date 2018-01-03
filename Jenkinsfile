@@ -8,7 +8,7 @@ pipeline {
                 stage('Print values') {
                         steps {
                                 echo 'Build path (Terraform): ' + buildPathTerraform
-                        #        echo 'Build path (Ansible): ' + buildPathAnsible
+                        /*        echo 'Build path (Ansible): ' + buildPathAnsible */
                                 echo 'Action: ' + action
                         }
                 }
