@@ -16,16 +16,16 @@ pipeline {
                         steps {
                                 dir('terraform/' + buildPath) {
                                         /*
-                                        sh 'terraform init -var-file variable_values.tfvars'
-                                        sh 'terraform plan -var-file variable_values.tfvars'
-                                        sh 'terraform apply -var-file variable_values.tfvars -auto-approve=true'
+                                        sh '/opt/terraform/terraform init -var-file variable_values.tfvars'
+                                        sh '/opt/terraform/terraform plan -var-file variable_values.tfvars'
+                                        sh '/opt/terraform/terraform apply -var-file variable_values.tfvars -auto-approve=true'
                                         */
 
-                                        sh 'terraform init'
-                                        sh 'terraform plan'
-                                        sh 'terraform apply -auto-approve=true'
-                                        sh 'terraform state pull'
- /*                                       sh 'terraform state pull > terraform-test.tfstate' */
+                                        sh '/opt/terraform/terraform init'
+                                        sh '/opt/terraform/terraform plan'
+                                        sh '/opt/terraform/terraform apply -auto-approve=true'
+                                        sh '/opt/terraform/terraform state pull'
+ /*                                       sh '/opt/terraform/terraform state pull > terraform-test.tfstate' */
                                 }
                         }
                 }       
