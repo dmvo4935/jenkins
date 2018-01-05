@@ -4,14 +4,14 @@ pipeline {
         agent any
 
         stages {
-/*                stage('Checkout') {
+                stage('Checkout') {
                         steps {
-                                git url: 'https://github.com/evry/cloudascore', 
+                                git url: 'https://github.com/dmvo4935/terraform', 
                                         branch: 'master', 
-                                        credentialsId: 'e74297bf-3674-4207-aecc-26ad65aa3f01'
+                                        credentialsId: 'a797285f-cdb3-4556-acf8-e4fcc13dca54'
                         }
                 }
-*/                
+                
                 stage('Terraform') {
                         steps {
                                 dir('terraform/' + buildPath) {
