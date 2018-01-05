@@ -20,9 +20,9 @@ pipeline {
                                         sh 'terraform destroy -var-file variable_values.tfvars --force'
                                         */
 
-                                        sh 'terraform init'
-                                        sh 'terraform plan -destroy'
-                                        sh 'terraform destroy --force'
+                                        sh '/opt/terraform/terraform init'
+                                        sh '/opt/terraform/terraform plan -destroy'
+                                        sh '/opt/terraform/terraform destroy --force'
                                 }
                         }
                 }
