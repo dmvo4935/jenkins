@@ -14,7 +14,7 @@ pipeline {
 
                 stage('Terraform') {
                         steps {
-                                dir('terraform/' + buildPath) {
+                                dir(buildPath) {
                                         /*
                                         sh 'terraform plan -destroy -var-file variable_values.tfvars'
                                         sh 'terraform destroy -var-file variable_values.tfvars --force'
