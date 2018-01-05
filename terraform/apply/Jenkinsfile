@@ -14,7 +14,7 @@ pipeline {
                 
                 stage('Terraform') {
                         steps {
-                                dir('terraform/' + buildPath) {
+                                dir(buildPath) {
                                         /*
                                         sh '/opt/terraform/terraform init -var-file variable_values.tfvars'
                                         sh '/opt/terraform/terraform plan -var-file variable_values.tfvars'
