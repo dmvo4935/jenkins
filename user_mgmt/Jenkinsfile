@@ -31,7 +31,7 @@ def getGraphToken (def client="f5341ae7-4c4a-4e9a-9dc7-72bd48778237", def tenant
 def getDomain(def tenant="de90065d-a41a-494f-b617-6bcc44161b37", def token) {
 def response = httpRequest acceptType: 'APPLICATION_JSON', responseHandle: 'NONE', consoleLogResponseBody: true, contentType: 'APPLICATION_JSON', httpMode: 'GET', ignoreSslErrors: true, url: 'https://graph.windows.net/'+tenant+'/domains?api-version=1.6', customHeaders: [[maskValue: false, name: 'Authorization', value: 'Bearer '+token]]
     def responseObject = jsonParse(response.content)
-    def domain = responseObject.value.name
+    def domain = responseObject.value["name"]
    // response.close()
   return domain[0]
 }
