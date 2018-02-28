@@ -63,11 +63,11 @@ def printMsg(def msg){
 
 node{
    stage ('Create AD User'){
-    def graphToken = getGraphToken()
+    def graphToken = getGraphToken(${env.sp_passwd})
     def domain = getDomain(graphToken)
     
     //defineUserJson(domain)
-    println createUser(defineUserJson(domain), graphToken)
+    println createUser(defineUserJson(domain, ${env.usr_passwd}), graphToken)
   }
 }
 
