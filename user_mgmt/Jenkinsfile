@@ -1,0 +1,73 @@
+#!/usr/bin/env groovy
+
+//import groovy.json.JsonSlurper
+import groovy.json.JsonSlurperClassic
+import groovy.json.JsonOutput
+
+def token=""
+def subscription=""
+def emailBody=""
+
+@NonCPS
+def jsonParse(def json) {
+    new groovy.json.JsonSlurperClassic().parseText(json)
+}
+
+//@NonCPS
+def getGraphToken (def client="f5341ae7-4c4a-4e9a-9dc7-72bd48778237", def tenant="de90065d-a41a-494f-b617-6bcc44161b37", def secret) {
+//    println "client_id: "+client
+//    println "tenant_id: "+tenant
+    def response = httpRequest contentType: 'APPLICATION_FORM', validResponseContent: 'access_token', consoleLogResponseBody: true, httpMode: 'POST', ignoreSslErrors: true, requestBody: 'client_id='+client+'&scope=https%3A%2F%2Fgraph.windows.net%2F.default&client_secret='+secret+'&grant_type=client_credentials', responseHandle: 'LEAVE_OPEN', url: 'https://login.microsoftonline.com/'+tenant+'/oauth2/v2.0/token'
+    def responseObject = jsonParse(response.content)
+    def token = responseObject.access_token
+//    println responseObject
+//    println "Got response: "+response.content
+//    println "Token: "+token
+    response.close()
+  return token
+}
+
+//@NonCPS
+def getDomain(def tenant="de90065d-a41a-494f-b617-6bcc44161b37", def token) {
+def response = httpRequest acceptType: 'APPLICATION_JSON', responseHandle: 'LEAVE_OPEN', consoleLogResponseBody: true, contentType: 'APPLICATION_JSON', httpMode: 'GET', ignoreSslErrors: true, url: 'https://graph.windows.net/'+tenant+'/domains?api-version=1.6', customHeaders: [[maskValue: false, name: 'Authorization', value: 'Bearer '+token]]
+    def responseObject = jsonParse(response.content)
+    def domain = responseObject.value.name
+    response.close()
+  return domain[0]
+}
+
+def defineUserJson(def userNickName="temp_user",
+                def domain,
+                def accountEnabled="true",
+                def forceChangePasswordNextLogin="false",
+                def password
+                ) {
+                   def userMap=[accountEnabled: accountEnabled, displayName: userNickName, mailNickname: userNickName, userPrincipalName: userNickName+'@'+domain, 
+                                passwordProfile: [forceChangePasswordNextLogin: forceChangePasswordNextLogin, password: password]]
+    
+                  def userDefinitionJson = JsonOutput.toJson(userMap)
+                 println userDefinitionJson
+                return  userDefinitionJson     
+                }
+
+def createUser(def userProfile, def token, def tenant="de90065d-a41a-494f-b617-6bcc44161b37") {
+  def response = httpRequest contentType: 'APPLICATION_JSON', validResponseContent: 'objectId', consoleLogResponseBody: true, httpMode: 'POST', ignoreSslErrors: true, requestBody: userProfile, responseHandle: 'NONE', url: 'https://graph.windows.net/'+tenant+'/users?api-version=1.6', customHeaders: [[maskValue: false, name: 'Authorization', value: 'Bearer '+token]]
+  def userObject = jsonParse(response.content)
+  return userObject.objectId
+}
+
+def printMsg(def msg){
+  println msg    
+}
+
+
+node{
+   stage ('Create AD User'){
+    def graphToken = getGraphToken()
+    def domain = getDomain(graphToken)
+    
+    //defineUserJson(domain)
+    println createUser(defineUserJson(domain), graphToken)
+  }
+}
+
