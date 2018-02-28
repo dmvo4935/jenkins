@@ -17,22 +17,22 @@ def jsonParse(def json) {
 def getGraphToken (def client="f5341ae7-4c4a-4e9a-9dc7-72bd48778237", def tenant="de90065d-a41a-494f-b617-6bcc44161b37", def secret) {
 //    println "client_id: "+client
 //    println "tenant_id: "+tenant
-    def response = httpRequest contentType: 'APPLICATION_FORM', validResponseContent: 'access_token', consoleLogResponseBody: true, httpMode: 'POST', ignoreSslErrors: true, requestBody: 'client_id='+client+'&scope=https%3A%2F%2Fgraph.windows.net%2F.default&client_secret='+secret+'&grant_type=client_credentials', responseHandle: 'LEAVE_OPEN', url: 'https://login.microsoftonline.com/'+tenant+'/oauth2/v2.0/token'
+    def response = httpRequest contentType: 'APPLICATION_FORM', validResponseContent: 'access_token', consoleLogResponseBody: true, httpMode: 'POST', ignoreSslErrors: true, requestBody: 'client_id='+client+'&scope=https%3A%2F%2Fgraph.windows.net%2F.default&client_secret='+secret+'&grant_type=client_credentials', responseHandle: 'NONE', url: 'https://login.microsoftonline.com/'+tenant+'/oauth2/v2.0/token'
     def responseObject = jsonParse(response.content)
     def token = responseObject.access_token
 //    println responseObject
 //    println "Got response: "+response.content
 //    println "Token: "+token
-    response.close()
+ //   response.close()
   return token
 }
 
 //@NonCPS
 def getDomain(def tenant="de90065d-a41a-494f-b617-6bcc44161b37", def token) {
-def response = httpRequest acceptType: 'APPLICATION_JSON', responseHandle: 'LEAVE_OPEN', consoleLogResponseBody: true, contentType: 'APPLICATION_JSON', httpMode: 'GET', ignoreSslErrors: true, url: 'https://graph.windows.net/'+tenant+'/domains?api-version=1.6', customHeaders: [[maskValue: false, name: 'Authorization', value: 'Bearer '+token]]
+def response = httpRequest acceptType: 'APPLICATION_JSON', responseHandle: 'NONE', consoleLogResponseBody: true, contentType: 'APPLICATION_JSON', httpMode: 'GET', ignoreSslErrors: true, url: 'https://graph.windows.net/'+tenant+'/domains?api-version=1.6', customHeaders: [[maskValue: false, name: 'Authorization', value: 'Bearer '+token]]
     def responseObject = jsonParse(response.content)
     def domain = responseObject.value.name
-    response.close()
+   // response.close()
   return domain[0]
 }
 
